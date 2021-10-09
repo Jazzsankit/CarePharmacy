@@ -1,79 +1,42 @@
-let express=require('express');
-let plans=require('./db/plan.json');
-let fs=require('fs');
-const { v4: uuidv4 } = require('uuid');
- 
-const app=express();
+const express = require("express");
+const planRouter = require("./Router/planRouter");
+const userRouter = require("./Router/userRouter");
+const nodemailer = require("nodemailer");
 
-app.use(express.json());
+const app = express();
 
-app.get('/plans/',(req,res)=>{
-    res.status(200).json({
-        mesagge:"succesfull",
-        data:plans
-    });
-})
+// it tracks incoming request and see if there is data in the request => the data will be fed in req.body
+app.use( express.json());
 
-app.post('/plans/',(req,res)=>{
-    let plan=req.body;
-    plan.id=uuidv4();
-    plans.push(plan);
-    fs.writeFileSync('./db/plan.json',JSON.stringify(plans));
-    res.status(201).json({
-        message:"sucsses",
-        data: plans
-    })
-})
+// async function sendMail(){
 
-app.delete('/plans/:id',function(req,res){
-    let {id}=req.params
-    let newPlans=plans.filter(function(plan){
-        return id!=plan.id
-    })
-    // console.log(newPlans);
-    if(plans.length!=newPlans.length){
-        fs.writeFileSync('./db/plan.json',JSON.stringify(newPlans));
-        plans=newPlans
-        res.status(201).json({
-            message:"succes",
-            data: plans
-        })
-    }
-    else{
-        res.status(404).json({
-            message:"non found",
-            data: plans
-        })
-    }
+//   let transporter = nodemailer.createTransport({
+//     host: "smtp.mailtrap.io",
+//     port: 2525,
+//     auth: {
+//       user: "465ba3bcb12bfe",
+//       pass: "68f5d6f7c57b96"
+//     }
+//   });
 
-})
+//   let info = await transporter.sendMail({
+//     from: '"Fred Foo 👻" <foo@example.com>', // sender address
+//     to: "bar@example.com, baz@example.com", // list of receivers
+//     subject: "Hello ✔", // Subject line
+//     text: "Hello world?", // plain text body
+//     html: "<b>Hello world?</b>", // html body
+//   });
 
-app.patch('/plans/:id',function(req,res){
-    let {id}=req.params;
-    let upateObj=req.body
-    let filterId=plans.filter(function(plan){
-        return id==plan.id
-    })
-    if(filterId){
-        let FilterId=filterId[0];
-        for(key in upateObj){
-            FilterId[key]=upateObj[key];
-        }
-        // console.log("jj",FilterId,"jkj");
-        // console.log(plans);
-        fs.writeFileSync('./db/plan.json',JSON.stringify(plans));
-        res.status(201).json({
-            message:"succes",
-            data: plans
-        })
-    }
-    else{
-        res.status(404).json({
-            message:"non found",
-            data: plans
-        })
-    }
-})
-app.listen(3000, ()=>{
-    console.log('app listening in 3000 port');
-})
+
+// }
+
+// sendMail()
+
+
+// app.httpMethod( appRoute , cb function( request , response   )      )
+app.use("/api/plans" , planRouter);
+app.use("/api/user" , userRouter);
+
+app.listen(3000, function () {
+  console.log("server started at port 3000");
+});
