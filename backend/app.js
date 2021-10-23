@@ -2,6 +2,8 @@ const express = require("express");
 const planRouter = require("./Router/planRouter");
 const userRouter = require("./Router/userRouter");
 const nodemailer = require("nodemailer");
+const viewRouter = require("./Router/viewRouter");
+const path = require("path");
 
 const app = express();
 
@@ -32,10 +34,18 @@ app.use( express.json());
 
 // sendMail()
 
+app.use(express.static("public"));
+// view engine set
+app.set("view engine" , "pug");
+// view path set
+app.set("views" , path.join(__dirname,"View"));
+
 
 // app.httpMethod( appRoute , cb function( request , response   )      )
 app.use("/api/plans" , planRouter);
 app.use("/api/user" , userRouter);
+app.use("/" , viewRouter);
+
 
 app.listen(3000, function () {
   console.log("server started at port 3000");
