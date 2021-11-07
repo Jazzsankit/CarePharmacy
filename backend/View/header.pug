@@ -1,11 +1,17 @@
 .navbar
   .option
-    a(href='') FEATURES
+    a(href='/home') FEATURES
   .option
-    a(href='') DETAILS
+    a(href='/details') DETAILS
   .option
-    a(href='') REVIEW
+    a(href='/reviews') REVIEW
   .plans.option
-    a(href='') PLANS
-  .sign-up.option
-    a(href='') SIGN UP
+    a(href='/plans') PLANS
+  if name
+    .sign-up.option
+      a(href='') #{name}
+    .sign-up.option
+      a(href='/logout') LOG OUT
+  else
+    .sign-up.option
+      a(href='/login') SIGN UP

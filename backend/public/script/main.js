@@ -6,46 +6,47 @@ let username = document.querySelector('#signupUsername');
 let signupEmail = document.querySelector('#signup-email');
 let signupPassword = document.querySelector('#signup-password');
 let confirmPassword = document.querySelector('#confirm-password');
+const loginForm = document.querySelector("#login");
 
-function setFormMessage(formElement ,type,message){
-    const messageElement=formElement.querySelector(".form__message");
+function setFormMessage(formElement, type, message) {
+    const messageElement = formElement.querySelector(".form__message");
 
-    messageElement.textContent=message;
-    messageElement.classList.remove("form__message--success","form__message--error");
+    messageElement.textContent = message;
+    messageElement.classList.remove("form__message--success", "form__message--error");
     messageElement.classList.add(`form__message--${type}`);
 }
 
-function setInputError(inputElement,message){
+function setInputError(inputElement, message) {
     inputElement.classList.add("form__input--error");
     inputElement.parentElement.querySelector(".form__input-error-message").textContent = message;
 }
 
-function clearInputError(inputElement){
+function clearInputError(inputElement) {
     inputElement.classList.remove("form__input--error");
     inputElement.parentElement.querySelector(".form__input-error-message").textContent = "";
 }
-    
-document.addEventListener("DOMContentLoaded", () => {
-    const loginForm=document.querySelector("#login");
-    const createAccountForm=document.querySelector("#createAccount");
 
-    document.querySelector("#linkCreateAccount").addEventListener("click",e => {
+document.addEventListener("DOMContentLoaded", () => {
+    const loginForm = document.querySelector("#login");
+    const createAccountForm = document.querySelector("#createAccount");
+
+    document.querySelector("#linkCreateAccount").addEventListener("click", e => {
         e.preventDefault();
         loginForm.classList.add("form--hidden");
         createAccountForm.classList.remove("form--hidden");
     })
 
-    document.querySelector("#linkLogin").addEventListener("click",e => {
+    document.querySelector("#linkLogin").addEventListener("click", e => {
         e.preventDefault();
-        loginForm.classList.remove ("form--hidden");
+        loginForm.classList.remove("form--hidden");
         createAccountForm.classList.add("form--hidden");
     });
 
-    loginForm.addEventListener("submit",e =>{
-      e.preventDefault();
-      //perform login
-      setFormMessage(loginForm,"error","Invalid username/password combination");
-    });
+    // loginBtn.addEventListener("click",e =>{
+    //   e.preventDefault();
+    //   //perform login
+    //   setFormMessage(loginForm,"error","Invalid username/password combination");
+    // });
 
     // document.querySelectorAll(".form__input").array.forEach(inputElement => {
     //     inputElement.addEventListener("blur", e => {
@@ -60,37 +61,43 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 
-loginBtn.addEventListener("click",async function(e){
-    try{
+loginBtn.addEventListener("click", async function (e) {
+    try {
         e.preventDefault(); // prevent page refresh
         // console.log(loginEmail,loginPassword)
-        if(loginEmail.value && loginPassword.value){
-            let obj = await axios.post( "http://localhost:3000/api/user/login" , {email:loginEmail.value , password:loginPassword.value});
+        if (loginEmail.value && loginPassword.value) {
+            let obj = await axios.post("http://localhost:3000/api/user/login", { email: loginEmail.value, password: loginPassword.value });
             console.log(obj);
-        }
-    }
-    catch(error){
-        console.log(error);
-    }
-}) 
-
-signUpBtn.addEventListener("click",async function(e){
-    try{
-        e.preventDefault(); // prevent page refresh
-        alert("click")
-        if(username.value && signupEmail.value && signupPassword.value && confirmPassword.value){
-            let signUpObj = {
-                "name" : username.value,
-                "email" : signupEmail.value,
-                "password" : signupPassword.value,
-                "confirmPassword" : confirmPassword.value,
-                "role" : "user"
+            if (obj.data.data) {
+                window.location.href = '/';
+            } else {
+                setFormMessage(loginForm, "error", obj.data.message);
             }
-            let obj = await axios.post( "http://localhost:3000/api/user/signup" , signUpObj);
+        } else {
+        }
+    }
+    catch (error) {
+        console.log(error);
+    }
+})
+
+signUpBtn.addEventListener("click", async function (e) {
+    try {
+        e.preventDefault(); // prevent page refresh
+        // alert("click")
+        if (username.value && signupEmail.value && signupPassword.value && confirmPassword.value) {
+            let signUpObj = {
+                "name": username.value,
+                "email": signupEmail.value,
+                "password": signupPassword.value,
+                "confirmPassword": confirmPassword.value,
+                "role": "user"
+            }
+            let obj = await axios.post("http://localhost:3000/api/user/signup", signUpObj);
             console.log(obj);
         }
     }
-    catch(error){
+    catch (error) {
         console.log(error);
     }
-}) 
+})

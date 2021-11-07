@@ -34,6 +34,7 @@ async function login(req, res) {
             let user = loggedInUser[0];
             if (user.password == password) {
                 const token = jwt.sign({ id: user["_id"] }, SECRET_KEY);
+                res.cookie('jwt',token,{httpOnly:true});
                 res.status(200).json({
                     message: "Logged in succesfully !!",
                     data: loggedInUser[0],
@@ -41,13 +42,13 @@ async function login(req, res) {
                 })
             }
             else {
-                res.status(501).json({
+                res.status(200).json({
                     message: "Email and Password didn't Matched !!",
                 })
             }
         }
         else {
-            res.status(501).json({
+            res.status(200).json({
                 message: "No User Found SignUp First",
             })
         }
@@ -60,12 +61,48 @@ async function login(req, res) {
     }
 }
 
+async function logout(req , res){
+    try{
+      res.clearCookie("jwt");
+      res.redirect("/");
+    }
+    catch(error){
+      res.status(501).json({
+        error
+      })
+    }
+  }
+
+async function isLoggedIn(req,res,next){
+    try{
+        const token = req.cookies.jwt;
+        // console.log(req.cookies);
+        const payload = jwt.verify(token, SECRET_KEY);
+        // console.log(payload)
+        if (payload) {
+            let user = await userModel.findById(payload.id);
+            // console.log(user);
+            req.name = user.name;
+            next();
+        }
+        else {
+            
+            next();
+        }
+    }
+    catch(error){
+        next();
+    }
+}
+
 async function protectRoute(req, res, next) {
     try {
         // console.log("hjjh")
-        const token = req.headers.authorization.split(" ").pop();
-        // console.log(token);
+        // const token = req.headers.authorization.split(" ").pop();
+        const token = req.cookies.jwt;
+        // console.log(req.cookies);
         const payload = jwt.verify(token, SECRET_KEY);
+        console.log(payload)
         if (payload) {
             req.id = payload.id
             next();
@@ -171,3 +208,5 @@ module.exports.signUp = signUp;
 module.exports.login = login;
 module.exports.forgetPassword = forgetPassword;
 module.exports.resetPasswword = resetPasswword;
+module.exports.isLoggedIn = isLoggedIn;
+module.exports.logout = logout;

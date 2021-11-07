@@ -4,11 +4,13 @@ const userRouter = require("./Router/userRouter");
 const nodemailer = require("nodemailer");
 const viewRouter = require("./Router/viewRouter");
 const path = require("path");
+var cookieParser = require('cookie-parser')
 
 const app = express();
 
 // it tracks incoming request and see if there is data in the request => the data will be fed in req.body
 app.use( express.json());
+app.use(cookieParser());
 
 // async function sendMail(){
 
@@ -34,6 +36,7 @@ app.use( express.json());
 
 // sendMail()
 
+//for searching file in public folder
 app.use(express.static("public"));
 // view engine set
 app.set("view engine" , "pug");

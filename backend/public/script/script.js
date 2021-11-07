@@ -30,6 +30,7 @@ window.addEventListener('load',function(){
 
     document.addEventListener("scroll",function(){
         let property=(showCase.getBoundingClientRect());
+        // console.log(property);
         if(property.bottom<=0){
             navBar.classList.add('fixed');
         }
