@@ -1,3 +1,4 @@
+
 let loginPassword = document.querySelector("#login-password");
 let loginEmail = document.querySelector("#login-email");
 let loginBtn = document.querySelector("#login-btn");
@@ -7,6 +8,7 @@ let signupEmail = document.querySelector('#signup-email');
 let signupPassword = document.querySelector('#signup-password');
 let confirmPassword = document.querySelector('#confirm-password');
 const loginForm = document.querySelector("#login");
+let resetPassword = document.querySelector('#resetPassword');
 
 function setFormMessage(formElement, type, message) {
     const messageElement = formElement.querySelector(".form__message");
@@ -98,6 +100,19 @@ signUpBtn.addEventListener("click", async function (e) {
         }
     }
     catch (error) {
+        console.log(error);
+    }
+})
+
+resetPassword.addEventListener("click", async function(e){
+    console.log('abc');
+    try {
+        e.preventDefault();
+        if(loginEmail.value){
+            let obj = await axios.post("http://localhost:3000/api/user/forgetpassword" , {email:loginEmail.value});
+            console.log(obj);
+        }
+    } catch (error) {
         console.log(error);
     }
 })

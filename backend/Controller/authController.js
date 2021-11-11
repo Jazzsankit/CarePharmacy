@@ -1,6 +1,32 @@
 const userModel = require("../Model/usersModel");
-const { SECRET_KEY } = require("../secrets/secret");
+const { SECRET_KEY, Gmail_id, pass } = require("../secrets/secret");
 const jwt = require('jsonwebtoken')
+const nodemailer = require('nodemailer');
+
+async function sendMail(message){
+    try {
+        let transporter = nodemailer.createTransport({
+          service: "gmail",
+          host: "smtp.gmail.io",
+          auth: {
+            user: Gmail_id,
+            pass: pass
+          }
+        });
+      
+        let info = await transporter.sendMail({
+            from: message.from, // sender address
+            to: message.to, // list of receivers
+            subject: message.subject, // Subject line
+            text: message.text, // plain text body
+        });
+        return info;
+    } catch (error) {
+        return error;
+    }
+  }
+  
+//   sendMail();
 
 async function signUp(req, res) {
     try {
@@ -151,10 +177,17 @@ async function forgetPassword(req, res) {
             console.log(token);
             await user.save({ validateBeforeSave: false });
             // console.log(updatedUser);
-            let resetLink = `http://localhost:3000/api/user/resetpassword/${token}`;
+            let resetLink = `http://localhost:3000/resetpassword/${token}`;
+            let message = {
+                from:"gupta.ankit78611@gmail.com",
+                to:email,
+                subject:"Reset Password",
+                text: resetLink
+              }
+              let response = await sendMail(message);
             res.json({
                 message: "Reset Link is sent to email",
-                resetLink,
+                response,
             })
         }
         else {
@@ -173,6 +206,7 @@ async function forgetPassword(req, res) {
 
 async function resetPasswword(req,res){
     try{
+        console.log("ankit")
         const token = req.params.token;
         const {password , confirmPassword} = req.body;
         const user = await userModel.findOne({
