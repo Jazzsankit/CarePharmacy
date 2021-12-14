@@ -15,6 +15,7 @@ async function getAllUsers(req, res) {
     })
   }
 }
+
 async function createUser(req, res) {
   try{
     let sentUser = req.body;
