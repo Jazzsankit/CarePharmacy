@@ -58,8 +58,10 @@ async function login(req, res) {
         let loggedInUser = await userModel.find({ email: email });
         if (loggedInUser.length) {
             let user = loggedInUser[0];
+            console.log(user)
             if (user.password == password) {
                 const token = jwt.sign({ id: user["_id"] }, SECRET_KEY);
+                // console.log(token);
                 res.cookie('jwt',token,{httpOnly:true});
                 res.status(200).json({
                     message: "Logged in succesfully !!",
@@ -108,6 +110,7 @@ async function isLoggedIn(req,res,next){
         if (payload) {
             let user = await userModel.findById(payload.id);
             // console.log(user);
+            req.user=user;
             req.name = user.name;
             next();
         }
@@ -123,25 +126,24 @@ async function isLoggedIn(req,res,next){
 
 async function protectRoute(req, res, next) {
     try {
-        // console.log("hjjh")
-        // const token = req.headers.authorization.split(" ").pop();
-        const token = req.cookies.jwt;
-        // console.log(req.cookies);
+            const token = req.cookies.jwt;
+            // console.log(req.cookies);
+        console.log("Inside protectRoute function");
+        // console.log(req.body);
         const payload = jwt.verify(token, SECRET_KEY);
-        console.log(payload)
         if (payload) {
-            req.id = payload.id
-            next();
-        }
-        else {
-            res.status(501).json({
-                message: "Pls Login First",
-            })
+        req.id = payload.id;
+        next();
+        } else {
+        res.status(501).json({
+            message: "Please Log in !!",
+        });
         }
     } catch (error) {
         res.status(501).json({
-            message: "Error in protectRoute"
-        })
+        message: "Please Log in !!",
+        error,
+        });
     }
 
 }

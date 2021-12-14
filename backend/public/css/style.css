@@ -392,3 +392,35 @@ footer {
   .signup-child {
     transform: scale(0.8);
   }
+
+  /* //profile */
+  .container-profile{
+    height: 500px;
+    width: 800px;
+    background: aliceblue;
+    display: flex;
+}
+.photo{
+    width: 40%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+.info{
+    width: 55%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+.profile-pic{
+    height: 50%;
+    width: 60%;
+}
+.profile-body{
+    display: flex;
+    justify-content: center;
+    height: calc(100vh - 154px);
+    align-items: center;
+}

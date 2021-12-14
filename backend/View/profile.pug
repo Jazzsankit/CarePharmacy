@@ -1,0 +1,23 @@
+extends base.pug
+block content 
+  .profile-body
+    .container-profile
+      .photo
+        img.profile-pic(src=user.pImage alt='' )
+        input(type='file' id="profile-picc")
+      .info.form
+        .name.form-style
+          | Name
+          input(type='text')
+        .role.form-style
+          | Role
+          // <label for="suggestion">How do know us</label>
+          select#suggest(name='')
+            option(value='user') user
+            option(value='shopkeeper') shopkeeper
+        .email.form-style
+          | Email
+          input(type='text')
+        .food-type.form-style
+          | Food Type
+          input(type='text')

@@ -35,6 +35,10 @@ let userSchema = new mongoose.Schema({
       message:"Password didn't matched !!"
     }
   },
+  pImage:{
+    type:String,
+    default:"/images/users/default.png"
+  },
   role:{
     type:String,
     enum:["admin" , "user" , "restaurant owner" , "delivery boy"],

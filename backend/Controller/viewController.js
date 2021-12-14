@@ -13,6 +13,9 @@ function getLoginPage(req,res){
 function getResetPage(req,res){
     res.render("resetpassword.pug",{name:req.name});
 }
+function getProfilePage(req,res){
+    res.render("profile.pug",{user:req.user})
+}
 async function getPlansPage(req,res){
     try{
         let plans = await planModel.find(); 
@@ -30,3 +33,4 @@ module.exports.getHomePage = getHomePage;
 module.exports.getLoginPage = getLoginPage;
 module.exports.getPlansPage = getPlansPage;
 module.exports.getResetPage = getResetPage;
+module.exports.getProfilePage = getProfilePage;
