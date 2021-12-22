@@ -1,10 +1,10 @@
 const express = require("express");
 const planRouter = require("./Router/planRouter");
 const userRouter = require("./Router/userRouter");
-const nodemailer = require("nodemailer");
 const viewRouter = require("./Router/viewRouter");
+const bookingRouter = require("./Router/bookingRouter");
 const path = require("path");
-var cookieParser = require('cookie-parser')
+var cookieParser = require('cookie-parser');
 
 const app = express();
 
@@ -28,6 +28,7 @@ app.set("views" , path.join(__dirname,"View"));
 app.use("/api/plans" , planRouter);
 app.use("/api/user" , userRouter);
 app.use("/" , viewRouter);
+app.use("/api/booking",bookingRouter);
 
 
 app.listen(3000, function () {

@@ -21,6 +21,6 @@
         | Free delivery
       li
         i.fas.fa-check.small-icon  
-        //- | Rated #{plan.ratings} out of 10  
+        | Discount #{plan.discount}$
     .signup-button
-      a.btn.btn-full(href='#') I'm hungry
+      a.btn.btn-full(planId=`${plan._id}`) Buy Me!
